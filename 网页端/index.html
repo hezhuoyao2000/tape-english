@@ -4,14 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HK English Typing Practice</title>
+
+<!-- CSS Reset, :root CSS variables (15 theme vars), starfield + scanline background effects -->
 <link rel="stylesheet" href="styles/base.css">
+<!-- Header bar, main typing area, word display letters (normal/correct/wrong/skip), progress bar, stats footer -->
 <link rel="stylesheet" href="styles/layout.css">
+<!-- All overlay panels: count selector, first-time guide, result card, word list table, review table, hidden input -->
 <link rel="stylesheet" href="styles/overlays.css">
+<!-- Responsive breakpoints: compact layout for narrow viewports -->
 <link rel="stylesheet" href="styles/responsive.css">
 </head>
 <body>
 
-<!-- Header -->
+<!-- Header — top navigation bar; btnSound/btnWordList/btnTheme/btnReview wired in init.js:finishInit();
+     soundSelect handled by sounds.js preset loader; categoryLabel updated by speech.js:getWordPool() -->
 <header class="header">
   <div class="header-left">
     <span class="header-title">HK ENGLISH TYPING</span>
@@ -33,7 +39,9 @@
   </div>
 </header>
 
-<!-- Main Area -->
+<!-- Main Typing Area — word display rendered by render.js:renderWord(); letter spans updated by
+     render.js:updateLetterStates(); pronounce buttons call speech.js:speakEnglish/speakCantonese();
+     progress bar driven by render.js:updateProgress() -->
 <main class="main">
   <div class="word-container">
     <div class="word-translation" id="wordTranslation"></div>
@@ -59,7 +67,9 @@
   </div>
 </main>
 
-<!-- Stats Bar -->
+<!-- Stats Footer — live metrics updated every rAF frame by render.js:updateStats();
+     WPM = totalCorrect/5/minutes; accuracy = totalCorrect/totalInputs;
+     timer driven by requestAnimationFrame loop in init.js:finishInit() -->
 <footer class="stats-bar">
   <div class="stat-item">
     <div class="stat-value" id="timeDisplay">00:00</div>
@@ -83,7 +93,8 @@
   </div>
 </footer>
 
-<!-- Guide Overlay (first-time only) -->
+<!-- Guide Overlay — shown once on first visit; dismissed by init.js:dismissGuide() which sets
+     typing_guide_dismissed in localStorage; after dismiss, countOverlay is revealed -->
 <div class="guide-overlay" id="guideOverlay">
   <div class="guide-card">
     <h2>// Getting Started</h2>
@@ -130,7 +141,10 @@
   </div>
 </div>
 
-<!-- Count Selector Overlay -->
+<!-- Count Selector Overlay — shown before each session; word count + theme chosen here;
+     count options call init.js which builds state.words via queue.js:getLearningQueue();
+     theme dots and color picker call panels/themes.js:applyTheme() / applyCustomColor();
+     btnCountConfirm starts the session and calls init.js:finishInit() -->
 <div class="count-overlay" id="countOverlay">
   <div class="count-card">
     <h2>// Words Today</h2>
@@ -160,10 +174,15 @@
   </div>
 </div>
 
-<!-- Hidden input -->
+<!-- Hidden Input — off-screen text input that captures all keystrokes; never visible to user;
+     focus managed by init.js:finishInit() (auto-refocus on blur for Safari compatibility);
+     input events cleared immediately; actual key handling done by input.js:handleKeydown() -->
 <input type="text" class="hidden-input" id="hiddenInput" tabindex="-1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
 
-<!-- Result Overlay -->
+<!-- Result Overlay — shown by session.js:showResults() when all words are completed;
+     star rating computed by session.js:getStarRating() (≥95%=3★, ≥85%=2★, ≥70%=1★);
+     session history rendered by session.js:renderSessionHistory() from localStorage;
+     btnRetry / btnNewSet call session.js:resetSession(keepWords) -->
 <div class="result-overlay" id="resultOverlay">
   <div class="result-card">
     <h2>// Complete</h2>
@@ -204,7 +223,9 @@
   </div>
 </div>
 
-<!-- Review Overlay -->
+<!-- Review Overlay — opened by btnReview; rendered by panels/review.js:renderReviewList();
+     reads state.wrongWordCounts (persisted via storage.js:recordWrongWord());
+     sortable by Word / Translation / Jyutping / Errors; sort state in panels/review.js:reviewSort -->
 <div class="review-overlay" id="reviewOverlay">
   <div class="review-card">
     <button class="review-close" id="btnReviewClose">X</button>
@@ -224,7 +245,9 @@
   </div>
 </div>
 
-<!-- Word List Overlay -->
+<!-- Word List Overlay — opened by btnWordList; rendered by panels/wordlist.js:renderWordList();
+     shows all words from wordbank.js with per-word attempt/completion stats from state.wordStats;
+     sortable by Word / Translation / Category / Attempts / Completed; sort state in panels/wordlist.js:wordListSort -->
 <div class="wordlist-overlay" id="wordlistOverlay">
   <div class="wordlist-card">
     <button class="wordlist-close" id="btnWordlistClose">X</button>
@@ -245,20 +268,51 @@
   </div>
 </div>
 
+<!-- Scripts loaded in strict dependency order (no ES Modules — all share global scope) -->
+
+<!-- Data layer: word dictionary { workplace: [...], daily: [...] }, each entry { en, zh, jyut } -->
 <script src="scripts/data/wordbank.js"></script>
+
+<!-- Global state object (state.*) + cacheElements() — must load before any module that reads state -->
 <script src="scripts/state.js"></script>
+
+<!-- WAV synthesis, audio pool (4 elements/sound), playKeySound(), flashFrame(), formatTime() -->
 <script src="scripts/sounds.js"></script>
+
+<!-- shuffle() Fisher-Yates, getLearningQueue() — unlearned words prioritized -->
 <script src="scripts/queue.js"></script>
+
+<!-- All localStorage read/write (loadWordStats, saveWordStats, recordWrongWord, recordAttempt, recordCompletion) -->
 <script src="scripts/storage.js"></script>
+
+<!-- Pure string utilities: isSkipChar(), typableLength(), nthNonSpace(), nonSpaceCountBefore() -->
 <script src="scripts/helpers.js"></script>
+
+<!-- Web Speech API: speakEnglish(), speakCantonese(), speakWord(); toggleSound(); getWordPool() -->
 <script src="scripts/speech.js"></script>
+
+<!-- DOM rendering: renderWord() letter spans, updateLetterStates(), updateProgress(), updateStats() -->
 <script src="scripts/render.js"></script>
+
+<!-- Word advancement: advanceWord(), handleWrongInput() shake+reset, handleCorrectLetter() completion check -->
 <script src="scripts/typing.js"></script>
+
+<!-- Session lifecycle: finishSession(), showResults(), hideResults(), resetSession(), star rating logic -->
 <script src="scripts/session.js"></script>
+
+<!-- Keyboard entry point: handleKeydown() — routes Backspace / printable chars through typing engine -->
 <script src="scripts/input.js"></script>
+
+<!-- Word list panel: renderWordList(), showWordList(), hideWordList() with sortable columns -->
 <script src="scripts/panels/wordlist.js"></script>
+
+<!-- Theme system: applyTheme(), cycleTheme(), applyCustomColor(), generateThemeFromColor() — 6 presets + custom -->
 <script src="scripts/panels/themes.js"></script>
+
+<!-- Wrong word review panel: renderReviewList(), showReviewPanel(), hideReviewPanel() with sortable columns -->
 <script src="scripts/panels/review.js"></script>
+
+<!-- App entry point: init() startup sequence + finishInit() event binding — must load last -->
 <script src="scripts/init.js"></script>
 
 
