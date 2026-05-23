@@ -1,0 +1,282 @@
+/* ============================================================
+   HEADER — 顶栏
+   ============================================================ */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  z-index: 10;
+  position: relative;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.header-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #fff;
+  text-shadow: 0 0 8px var(--neon-cyan);
+  white-space: nowrap;
+}
+.header-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Sound & icon buttons — 音效和图标按钮 */
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 15px;
+  font-family: var(--font-mono);
+  transition: all 0.25s ease;
+}
+.icon-btn:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+.icon-btn.muted {
+  color: var(--neon-red);
+  text-decoration: line-through;
+}
+
+/* Sound selector dropdown — 音效下拉选择 */
+.sound-sel {
+  padding: 5px 8px;
+  border: 1px solid var(--border-subtle);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 10px;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  outline: none;
+  border-radius: 0;
+}
+.sound-sel:hover,
+.sound-sel:focus {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+.sound-sel option {
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* ============================================================
+   MAIN CONTENT AREA — 主内容区
+   ============================================================ */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  padding: 20px;
+}
+
+/* === Word Display — 单词显示区 === */
+.word-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+/* Translation / hint above word — 中文翻译提示 */
+.word-translation {
+  font-size: 34px;
+  color: #d0d0f0;
+  font-weight: 600;
+  min-height: 44px;
+  letter-spacing: 1px;
+  opacity: 0.9;
+  text-align: center;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.35), 0 0 16px rgba(160,180,220,0.2);
+}
+.word-jyutping {
+  font-size: 20px;
+  color: var(--neon-purple);
+  font-family: var(--font-mono);
+  min-height: 28px;
+  letter-spacing: 0.5px;
+  opacity: 0.75;
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* Word frame — 单词方框 */
+.word-frame {
+  display: inline-flex;
+  border: 2px solid var(--border-subtle);
+  padding: 20px 40px;
+  border-radius: 6px;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+.word-frame.correct-flash {
+  border-color: var(--neon-green);
+  box-shadow: 0 0 18px rgba(0,255,136,0.3);
+}
+.word-frame.wrong-flash {
+  border-color: var(--neon-red);
+  box-shadow: 0 0 14px rgba(255,51,102,0.3);
+}
+
+/* The word itself — 单词本体 */
+.word-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 52px;
+  font-family: var(--font-mono);
+  letter-spacing: 4px;
+  line-height: 1.2;
+  transition: transform 0.15s ease;
+  user-select: none;
+}
+.word-display.shake {
+  animation: shake 0.4s ease;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(4px); }
+}
+
+/* Individual letters — 单个字母 */
+.letter {
+  display: inline;
+  transition: color 0.1s ease;
+}
+.letter.normal { color: var(--text-muted); }
+.letter.correct { color: var(--neon-green); text-shadow: 0 0 8px rgba(0,255,136,0.5); }
+.letter.wrong { color: var(--neon-red); text-shadow: 0 0 8px rgba(255,51,102,0.5); }
+.letter.space { width: 0.45em; display: inline-block; }
+.letter.skip { color: var(--text-muted); opacity: 0.6; }
+
+/* Pronunciation buttons — 发音按钮 */
+.pronounce-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.pronounce-btn {
+  padding: 6px 18px;
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  letter-spacing: 1px;
+  transition: all 0.25s ease;
+}
+.pronounce-btn:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 10px rgba(0,240,255,0.1);
+}
+
+/* ============================================================
+   PROGRESS BAR — 进度条
+   ============================================================ */
+.progress-wrap {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 32px;
+}
+.progress-bar {
+  width: 100%;
+  height: 3px;
+  background: var(--border-subtle);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+  transition: width 0.3s ease;
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(0,240,255,0.3);
+}
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* ============================================================
+   STATS BAR (bottom) — 底部统计栏
+   ============================================================ */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  padding: 0;
+}
+.stat-item {
+  text-align: center;
+  padding: 14px 4px;
+  position: relative;
+}
+.stat-item + .stat-item {
+  border-left: 1px solid var(--border-subtle);
+}
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.stat-item:nth-child(1) .stat-value { color: var(--neon-cyan); text-shadow: 0 0 6px rgba(0,240,255,0.3); }
+.stat-item:nth-child(2) .stat-value { color: var(--neon-magenta); text-shadow: 0 0 6px rgba(255,0,229,0.3); }
+.stat-item:nth-child(3) .stat-value { color: var(--neon-amber); text-shadow: 0 0 6px rgba(255,184,0,0.3); }
+.stat-item:nth-child(4) .stat-value { color: var(--neon-green); text-shadow: 0 0 6px rgba(0,255,136,0.3); }
+.stat-item:nth-child(5) .stat-value { color: var(--neon-purple); text-shadow: 0 0 6px rgba(168,85,247,0.3); }
+
+.stat-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-top: 2px;
+  font-family: var(--font-mono);
+}
+

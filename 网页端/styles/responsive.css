@@ -1,0 +1,32 @@
+/* ============================================================
+   RESPONSIVE — 响应式适配
+   ============================================================ */
+@media (max-width: 640px) {
+  .header {
+    padding: 10px 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .header-title { font-size: 13px; }
+  .word-display { font-size: 32px; letter-spacing: 2px; }
+  .word-translation { font-size: 22px; }
+  .word-jyutping { font-size: 16px; }
+  .word-frame { padding: 12px 20px; }
+  .pronounce-btn { padding: 5px 12px; font-size: 11px; }
+  .sound-sel { font-size: 9px; padding: 4px 6px; }
+  .stat-value { font-size: 18px; }
+  .stat-label { font-size: 9px; letter-spacing: 1px; }
+  .stat-item { padding: 10px 4px; }
+  .result-card { padding: 28px 18px; }
+  .result-stats { gap: 20px; }
+  .result-stat .rs-val { font-size: 32px; }
+  .result-detail-grid { grid-template-columns: 1fr; }
+  .result-buttons { flex-direction: column; }
+  .guide-card { padding: 36px 22px; }
+  .guide-card h2 { font-size: 20px; }
+  .guide-step { gap: 12px; }
+  .guide-step-title { font-size: 14px; }
+  .guide-step-desc { font-size: 11px; }
+  .guide-step-cn { font-size: 11px; }
+  .guide-welcome { font-size: 13px; }
+}

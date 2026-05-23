@@ -1,0 +1,75 @@
+/* ============================================================
+   RESET & BASE — 重置样式 & 基础变量
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #08081a;
+  --surface: #10102a;
+  --surface-alt: #181840;
+  --neon-cyan: #00f0ff;
+  --neon-magenta: #ff00e5;
+  --neon-purple: #a855f7;
+  --neon-green: #00ff88;
+  --neon-red: #ff3366;
+  --neon-amber: #ffb800;
+  --text: #e0e0f0;
+  --text-muted: #7878a8;
+  --border-subtle: #252550;
+  --glass-bg: rgba(8,8,26,0.8);
+  --star-opacity: 1;
+  --scanline-opacity: 1;
+  --font-mono: "SF Mono", "Fira Code", "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* === Starfield Background — 星空背景 === */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 40% 10%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 55% 70%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1.5px 1.5px at 15% 85%, rgba(0,240,255,0.5), transparent),
+    radial-gradient(1px 1px at 75% 80%, rgba(255,0,229,0.4), transparent),
+    radial-gradient(1px 1px at 5% 40%, rgba(168,85,247,0.4), transparent),
+    radial-gradient(1px 1px at 95% 65%, rgba(0,240,255,0.3), transparent);
+  pointer-events: none;
+  z-index: 0;
+  opacity: var(--star-opacity);
+  animation: starPulse 4s ease-in-out infinite alternate;
+}
+@keyframes starPulse {
+  0% { filter: brightness(0.6); }
+  100% { filter: brightness(1); }
+}
+
+/* === Scanline overlay — 扫描线覆层 === */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  pointer-events: none;
+  z-index: 999;
+  opacity: var(--scanline-opacity);
+}
+
